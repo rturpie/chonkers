@@ -4,10 +4,19 @@ from flask_login import current_user, login_user
 from app.models import User, Location
 from flask import request
 import json
+from datetime import datetime
 
 @app.route('/')
 def index():
     return "hello world!"
+
+@app.before_request
+def update_last_active():
+    try:
+        current_user.last_active = datetime.now()
+        db.session.commit()
+    except Exception as e:
+        print(e)
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -61,10 +70,18 @@ def location():
     lines = loc_file.readlines()
     loc_file.close()
     lines = list(map(lambda z: z.strip(), lines))
-    out = {'data': lines} 
+    out = {'name': loc_name,'data': lines} 
     return json.dumps(out)
-    
-    
+
+@app.route('/entities')
+def entities():
+    if not current_user.is_authenticated:
+        return "user not authenticated"
+    print (current_user.location)
+    users = User.query.filter_by(location=current_user.location)
+    for user in users:
+        print(user.last_active)
+    return ""
 
 
     

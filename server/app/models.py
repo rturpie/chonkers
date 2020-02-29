@@ -10,6 +10,8 @@ class User(UserMixin, db.Model):
     location = db.Column(db.Integer, db.ForeignKey('location.id'))
     health = db.Column(db.Integer)
     max_health = db.Column(db.Integer)
+    last_active = db.Column(db.DateTime)
+    position = db.Column(db.String(32))
 
     def __repr__(self):
         return '<User {}>'.format(self.username) 

@@ -62,6 +62,12 @@ GBimage = GBimage.resize((32, 32), Image.ANTIALIAS)
 GBimage.save('goodboy2.png')
 GBimage = PhotoImage(file = 'goodboy2.png')
 
+# stats images
+SNACCimage = Image.open('snacc.png')
+SNACCimage = SNACCimage.resize((32, 32), Image.ANTIALIAS)
+SNACCimage.save('snacc2.png')
+SNACCimage = PhotoImage(file = 'snacc2.png')
+
 # function to login
 def login():
     x1 = str(userbox.get())

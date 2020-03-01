@@ -210,6 +210,9 @@ def draw_cat(pos, df):
     if df%2 ==1:
         screen.blit(CATLimage, pos)
 
+def draw_chest(pos, df):
+    screen.blit(CHESTimage, pos)
+
         
         
 
@@ -408,6 +411,7 @@ root.bind("<KeyPress>",send_action)
 # root.bind("<d>",send_action)
 
 temp = 0
+counter = 0
 while True:
     root.update()
     pygame.display.update()
@@ -450,12 +454,16 @@ while True:
                 px = px - dx
                 py = py - dy
                 draw_skeleton((px,py), DRAW_FRAME)
-                
+            elif data["type"] == "c":
+                px,py = map(int, data['position'].split(','))
+                px = px - dx
+                py = py - dy
+                draw_chest((px,py), DRAW_FRAME)
         draw_player(direction, THE_BOYS, (0,0), DRAW_FRAME)
 
         for e in entities:
             data = entities[e]
-            if data["type"] == "p" and e != USERNAME:
+            if (data["type"] == "p" or data["type"] == "e")  and e != USERNAME:
                 px,py = map(int, data['position'].split(','))
                 px = px - dx
                 py = py - dy
@@ -465,6 +473,29 @@ while True:
         screen.blit(textbox, (WIDTH//2,HEIGHT_GAME//2 - 20))
         locbox = myfont.render(loc['name'], False, (180,20,20))
         screen.blit(locbox, (0,0))
+
+        if counter >= 8:
+            stats = get_stats()
+            hp = stats['hp']
+            max_hp = stats['max_hp']
+            xp = stats['xp']
+            hunger = stats['hunger']
+            max_hunger = stats['max_hunger']
+
+            # health
+            u = "HEALTH: " + str(hp) + "/" + str(max_hp)
+            user1 = tk.Label(root, text= u)
+            user1.config(font=('helvetica', 10))
+            logincanvas.create_window(130, 210, window=user1)
+
+            # good boy
+            u = "GOOD BOY POINTS: " + str(xp)
+            user1 = tk.Label(root, text= u)
+            user1.config(font=('helvetica', 10))
+            logincanvas.create_window(150, 240, window=user1)
+            counter = 0
+
+        counter += 1
 
 
         # draw_skeleton((200,300), DRAW_FRAME)
